@@ -35,7 +35,9 @@ config = {
     'db': {
         'dbPath': 'data/path.npy'
     },
-    'extractorPath': './Extractor'
+    'featureExtractor': {
+        'extractorPath': 'E:\\workspace\\C++\\person_feature modifiedversion\\person_feature(1)\\person_feature\\Release'
+    }
 }
 
 searcher = Search.Searcher(config)
@@ -47,16 +49,14 @@ def search():
         # 获取数据
         data = request.form
         print(data)
+
         result, msg, paths = searcher.search(data['imageUrl'], int(data['pageNum']), int(data['pageSize']), int(data['k']))
 
         reply = {
             'result': result,
             'msg': msg,
-            # 'data': ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg']
             'data': paths
         }
-        print(reply)
-        # return json.dumps(reply, ensure_ascii=False)
         return jsonify(reply)
 
 

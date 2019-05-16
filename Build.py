@@ -3,8 +3,10 @@ import numpy as np
 import ExtractFeature
 
 
-def build(picPath, featurePath, pathPath, extractorPath):
-    result, msg, paths, features = ExtractFeature.extract(extractorPath, picPath, 1)
+def build(picPath, featurePath, pathPath, config):
+    featureExtractor = ExtractFeature.FeatureExtractor(config)
+
+    result, msg, paths, features = featureExtractor.extract(picPath, 1)
 
     if result:
         print(f'提取特征失败:{msg}')
@@ -23,12 +25,17 @@ def build(picPath, featurePath, pathPath, extractorPath):
 
 
 if __name__ == '__main__':
+    # ##################################
+    # # 使用范例
+    # ##################################
     picPath = 'data/image'
     featurePath = 'data/dataset.npy'
     pathPath = 'data/path.npy'
-    extractorPath = './Extractor'
+    config = {
+        'extractorPath': './Extractor'
+    }
 
-    # build(picPath, featurePath, pathPath, extractorPath)
+    build(picPath, featurePath, pathPath, config)
 
     feature = np.load(featurePath)
     print(feature)

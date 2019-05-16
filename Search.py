@@ -14,7 +14,7 @@ class Searcher(object):
     def __init__(self, config):
         self.__db = Db.Db.load(config['db'])
         self.__searcher = model.create(config['model'])
-        self.__extractorPath = config['extractorPath']
+        self.__featureExtractor = ExtractFeature.FeatureExtractor(config['featureExtractor'])
 
     def __savePic(self, data, path, fileName):
         picData = data.split(",")[1]
@@ -35,7 +35,7 @@ class Searcher(object):
             return RESULT_ERROR, "图片数据不正确", None
 
         # 提取图片的特征
-        result, msg, _, features = ExtractFeature.extract(self.__extractorPath, path, 0)
+        result, msg, _, features = self.__featureExtractor.extract(path, 0)
 
         if result != 0 or features.shape[0] != 1:
             return RESULT_ERROR, msg, None

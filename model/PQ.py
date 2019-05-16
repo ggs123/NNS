@@ -94,7 +94,6 @@ class Searcher(object):
         return np.apply_along_axis(_find, 1, query if query.ndim == 2 else query[None])
 
 
-
 if __name__ == '__main__':
     config1 = {
         'encoder': {

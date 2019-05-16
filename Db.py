@@ -21,10 +21,12 @@ class Db(object):
 
 
 if __name__ == '__main__':
-    # config = {
-    #     'locationPath': 'data/path.pkl'
-    # }
-    # db = Db.load(config)
-    #
-    # print(db.getLocations([1, 2]))
-    pass
+    # ##################################
+    # # 使用范例
+    # ##################################
+    config = {
+        'dbPath': 'data/path.npy'
+    }
+    db = Db.load(config)
+
+    print(db.getPath([1, 2]))
