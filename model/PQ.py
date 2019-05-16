@@ -95,7 +95,7 @@ class Searcher(object):
 
 
 if __name__ == '__main__':
-    config1 = {
+    config = {
         'encoder': {
             "type": "train",
             "config": {
@@ -117,6 +117,6 @@ if __name__ == '__main__':
             # 'dataPath': 'data/qDataset.npy'
         }
     }
-    s1 = Searcher.build(config1)
+    s1 = Searcher.build(config)
 
     print(s1.search(np.random.rand(1, 62).astype(np.float), 6))

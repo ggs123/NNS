@@ -41,11 +41,20 @@ class Searcher(object):
             return RESULT_ERROR, msg, None
 
         # 搜索
-        neighborIndexes = self.__searcher.search(features[0], k)[0]
-        neighborIndexes = neighborIndexes[pageNum * pageSize:(pageNum + 1) * pageSize]
+        indexes = self.__searcher.search(features[0], k)
+
+        modelNum = indexes.shape[0]
+        pageSizeOneModel = pageSize // modelNum
+        if pageSizeOneModel * modelNum != pageSize:
+            return RESULT_ERROR, f'当前model数目为:{modelNum},pageSize应该为它的整数倍', None, None
+
+        indexes = indexes[:, pageNum * pageSizeOneModel:(pageNum + 1) * pageSizeOneModel]
+
 
         try:
-            neighborPaths = self.__db.getPath(neighborIndexes)
+            neighborPaths = []
+            for index in indexes:
+                neighborPaths.extend(self.__db.getPath(index))
         except Exception as err:
             return RESULT_ERROR, "查询出错", None
 
