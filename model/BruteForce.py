@@ -22,6 +22,10 @@ class Searcher(object):
 
 
 if __name__ == '__main__':
+    # ##################################
+    # # 使用范例
+    # ##################################
+
     config = {
         'data': {
             "path": "../data/dataset.npy"

@@ -44,12 +44,3 @@ if __name__ == '__main__':
     path = np.load(pathPath)
     print(path)
     print(path.shape)
-
-    # feature1 = feature[:, :17]
-    # feature2 = feature[:, 17:]
-    #
-    # print(feature1.shape)
-    # print(feature2.shape)
-    #
-    # # print(np.all(feature1 == 0))
-    # np.save("data/datasetWithout0.npy", feature2)

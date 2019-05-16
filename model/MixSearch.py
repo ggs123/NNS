@@ -19,6 +19,10 @@ class Searcher(object):
 
 
 if __name__ == '__main__':
+    # ##################################
+    # # 使用范例
+    # ##################################
+
     config = {
         'models': [{'name': 'PQ',
                     'config': {
@@ -53,6 +57,5 @@ if __name__ == '__main__':
     }
 
     mixSearcher = Searcher.build(config)
-    result = mixSearcher.search(np.random.rand(1, 62), 200)
-    print(result)
+    print(mixSearcher.search(np.random.rand(1, 62), 200))
 

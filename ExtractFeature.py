@@ -55,6 +55,9 @@ class FeatureExtractor(object):
         if not extractedImage:
             return 1, "该目录下没有图片", None, None
 
+        # 将相对路径中的'\\'替换为'/'
+        paths = [path.replace('\\', '/') for path in paths]
+
         return 0, 'OK', paths, features
 
     def extract(self, root, depth):
@@ -81,7 +84,7 @@ class FeatureExtractor(object):
                     paths = paths + _paths
 
             # 将所有图片的路径变为相对根目录的路径
-            rootStr = str(root.absolute()) + '\\'
+            rootStr = f'{str(root.absolute())}/'.replace('\\', '/')
             paths = [path.replace(rootStr, '') for path in paths]
 
             return 0, msg, np.array(paths), np.array(features)

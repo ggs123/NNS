@@ -65,8 +65,7 @@ def search():
         print(data)
 
         result, msg, paths = searcher.search(data['imageUrl'], int(data['pageNum']), int(data['pageSize']), int(data['k']))
-        paths = [path.replace('\\', '/') for path in paths]
-        print(paths)
+
         reply = {
             'result': result,
             'msg': msg,
