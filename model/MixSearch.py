@@ -1,6 +1,7 @@
 # coding=utf-8
 import model
 import numpy as np
+import math
 
 
 class Searcher(object):
@@ -14,7 +15,8 @@ class Searcher(object):
 
         return Searcher(searchers)
 
-    def search(self, query, k):
+    def search(self, query, num):
+        k = math.ceil(num / len(self.__searchers))
         return np.vstack([searcher.search(query, k) for searcher in self.__searchers])
 
 
@@ -22,7 +24,6 @@ if __name__ == '__main__':
     # ##################################
     # # 使用范例
     # ##################################
-
     config = {
         'models': [{'name': 'PQ',
                     'config': {

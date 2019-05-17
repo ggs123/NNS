@@ -24,7 +24,7 @@ class Searcher(object):
         with open(path, 'wb') as f:
             f.write(decodedPicData)
 
-    def search(self, data, pageNum, pageSize, k):
+    def search(self, data, pageNum, pageSize, num):
         path = 'data/tmp'   # 图片存放路径
         fileName = 'tmp.jpg'
 
@@ -41,15 +41,12 @@ class Searcher(object):
             return RESULT_ERROR, msg, None
 
         # 搜索
-        indexes = self.__searcher.search(features[0], k)
-
+        indexes = self.__searcher.search(features[0], num)
         modelNum = indexes.shape[0]
         pageSizeOneModel = pageSize // modelNum
         if pageSizeOneModel * modelNum != pageSize:
             return RESULT_ERROR, f'当前model数目为:{modelNum},pageSize应该为它的整数倍', None, None
-
         indexes = indexes[:, pageNum * pageSizeOneModel:(pageNum + 1) * pageSizeOneModel]
-
 
         try:
             neighborPaths = []

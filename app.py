@@ -64,7 +64,7 @@ def search():
         data = request.form
         print(data)
 
-        result, msg, paths = searcher.search(data['imageUrl'], int(data['pageNum']), int(data['pageSize']), int(data['k']))
+        result, msg, paths = searcher.search(data['imageUrl'], int(data['pageNum']), int(data['pageSize']), int(data['num']))
 
         reply = {
             'result': result,
