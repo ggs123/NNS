@@ -2,48 +2,16 @@
 from flask import Flask, request, jsonify
 import Search
 import flask_cors
+import json
 
 app = Flask(__name__)
 flask_cors.CORS(app, supports_credentials=True)
 
-pqConfig = {'name': 'model.PQ',
-            'config': {
-                'encoder': {
-                    "type": "train",
-                    "config": {
-                        "datasetPath": "data/dataset.npy",
-                        "numOfSegments": 31,
-                        "numOfClasses": 16,
-                        "centroidsPath": "data/centroids.npy"
-                    }
-                    # 'type': 'load',
-                    # "config": {
-                    #     'centroidsPath': 'data/centroids8x4.npy'
-                    # }
-                },
-                'data': {
-                    "type": "train",
-                    "dataPath": "data/dataset.npy",
-                    "qdbPath": "data/qDataset.npy"
-                    # 'type': 'load',
-                    # 'dataPath': 'data/qDataset.npy'
-                }
-            }
-}
-
-bruteForceConfig = {'name': 'model.BruteForce',
-                    'config': {
-                        'data': {
-                            "path": "data/dataset.npy"
-                        }
-                    }
-}
-
 config = {
     'model': {
-        'name': 'model.MixSearch',
+        'name': 'MixSearch',
         'config': {
-            'models': [pqConfig]
+            'configPath': "model/modelConfig.json"
         }
     },
     'db': {
@@ -64,12 +32,26 @@ def search():
         data = request.form
         print(data)
 
-        result, msg, paths = searcher.search(data['imageUrl'], int(data['pageNum']), int(data['pageSize']), int(data['num']))
+        result, msg, paths = searcher.search(data['image'], json.loads(data['pageInfo']))
+        # result, msg, paths = 0, "ok", ["1.jpg"]
 
         reply = {
             'result': result,
             'msg': msg,
             'data': paths
+        }
+        return jsonify(reply)
+
+
+@app.route('/fetchModelName', methods=['GET'])
+def fetchModelName():
+    if request.method == 'GET':
+        result, msg, data = searcher.getModelName()
+
+        reply = {
+            'result': result,
+            'msg': msg,
+            'data': data
         }
         return jsonify(reply)
 

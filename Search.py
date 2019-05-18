@@ -16,7 +16,7 @@ class Searcher(object):
         self.__searcher = model.create(config['model'])
         self.__featureExtractor = ExtractFeature.FeatureExtractor(config['featureExtractor'])
 
-    def __savePic(self, data, path, fileName):
+    def __saveImage(self, data, path, fileName):
         picData = data.split(",")[1]
         decodedPicData = base64.b64decode(picData)
         path = f'{path}/{fileName}'
@@ -24,13 +24,13 @@ class Searcher(object):
         with open(path, 'wb') as f:
             f.write(decodedPicData)
 
-    def search(self, data, pageNum, pageSize, num):
+    def search(self, data, pageInfo):
         path = 'data/tmp'   # 图片存放路径
         fileName = 'tmp.jpg'
 
         # 将图片保存到data/tmp下，图片名为tmp.jpg
         try:
-            self.__savePic(data, path, fileName)
+            self.__saveImage(data, path, fileName)
         except Exception as err:
             return RESULT_ERROR, "图片数据不正确", None
 
@@ -41,19 +41,21 @@ class Searcher(object):
             return RESULT_ERROR, msg, None
 
         # 搜索
-        indexes = self.__searcher.search(features[0], num)
-        modelNum = indexes.shape[0]
-        pageSizeOneModel = pageSize // modelNum
-        if pageSizeOneModel * modelNum != pageSize:
-            return RESULT_ERROR, f'当前model数目为:{modelNum},pageSize应该为它的整数倍', None, None
-        indexes = indexes[:, pageNum * pageSizeOneModel:(pageNum + 1) * pageSizeOneModel]
+        result = self.__searcher.search(features[0], pageInfo)
+        print(result)
 
-        try:
-            neighborPaths = []
-            for index in indexes:
-                neighborPaths.extend(self.__db.getPath(index))
-        except Exception as err:
-            return RESULT_ERROR, "查询出错", None
+        for modelName, info in pageInfo.items():
+            pageNum = info['pageNum']
+            pageSize = info['pageSize']
 
-        return RESULT_OK, MSG_OK, neighborPaths
+            indexes = result[modelName][pageNum * pageSize:(pageNum + 1) * pageSize]
+            try:
+                indexes = self.__db.getPath(indexes)
+            except Exception as err:
+                return RESULT_ERROR, "查询出错", None
+            result[modelName] = indexes
 
+        return RESULT_OK, MSG_OK, result
+
+    def getModelName(self):
+        return RESULT_OK, MSG_OK, model.models

@@ -1,7 +1,16 @@
 import importlib
+import os
+import sys
+
+models = ['BruteForce', 'PQ']
 
 
 def create(config):
+    # 将model文件夹加入到import的搜索路径里
+    currentDir = os.path.dirname(__file__)
+    if currentDir not in sys.path:
+        sys.path.append(currentDir)
+
     module = importlib.import_module(config['name'])
     searcher = module.Searcher.build(config['config'])
 
@@ -9,33 +18,6 @@ def create(config):
 
 
 if __name__ == '__main__':
-    # config = {
-    #     'name': 'PQ',
-    #     'config': {
-    #         'encoder': {
-    #             # "type": "train",
-    #             # "config": {
-    #             #     "datasetPath": "data/testData8x4.npy",
-    #             #     "numOfSegments": 2,
-    #             #     "numOfClasses": 4,
-    #             #     "centroidsPath": "data/centroids8x4.npy"
-    #             # }
-    #             'type': 'load',
-    #             "config": {
-    #                 'centroidsPath': '../data/centroids8x4.npy'
-    #             }
-    #         },
-    #         'data': {
-    #             # "type": "train",
-    #             # "dataPath": "data/testData8x4.npy",
-    #             # "qdbPath": "data/qDataset8x4.npy"
-    #             'type': 'load',
-    #             'dataPath': '../data/qDataset8x4.npy'
-    #         }
-    #     }
-    # }
-    #
-    # s = create(config)
-    # print(s.search(np.random.rand(1, 4), 4))
-
     pass
+
+
