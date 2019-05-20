@@ -3,6 +3,7 @@ import base64
 import Db
 import model
 import ExtractFeature
+import functools
 
 
 RESULT_OK = 0
@@ -24,10 +25,11 @@ class Searcher(object):
         with open(path, 'wb') as f:
             f.write(decodedPicData)
 
-    def search(self, data, pageInfo):
-        path = 'data/tmp'   # 图片存放路径
+    @functools.lru_cache()
+    def __extract(self, data):
+        path = 'data/tmp'  # 图片存放路径
         fileName = 'tmp.jpg'
-
+        print('111')
         # 将图片保存到data/tmp下，图片名为tmp.jpg
         try:
             self.__saveImage(data, path, fileName)
@@ -35,7 +37,11 @@ class Searcher(object):
             return RESULT_ERROR, "图片数据不正确", None
 
         # 提取图片的特征
-        result, msg, _, features = self.__featureExtractor.extract(path, 0)
+        return self.__featureExtractor.extract(path, 0)
+
+    def search(self, data, pageInfo):
+        # 提取特征
+        result, msg, _, features = self.__extract(data)
 
         if result != 0 or features.shape[0] != 1:
             return RESULT_ERROR, msg, None
