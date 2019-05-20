@@ -3,11 +3,13 @@ from flask import Flask, request, jsonify
 import Search
 import flask_cors
 import json
+import model
 
 app = Flask(__name__)
 flask_cors.CORS(app, supports_credentials=True)
 
 config = {
+    'models': ['BruteForce', 'PQ'],
     'model': {
         'name': 'MixSearch',
         'config': {
@@ -22,6 +24,7 @@ config = {
     }
 }
 
+model.registeModel(config['models'])
 searcher = Search.Searcher(config)
 
 

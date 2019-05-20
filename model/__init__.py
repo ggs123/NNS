@@ -2,7 +2,7 @@ import importlib
 import os
 import sys
 
-models = ['BruteForce', 'PQ']
+models = []
 
 
 def create(config):
@@ -15,6 +15,11 @@ def create(config):
     searcher = module.Searcher.build(config['config'])
 
     return searcher
+
+
+def registeModel(modelNames):
+    global models
+    models.extend(modelNames)
 
 
 if __name__ == '__main__':
